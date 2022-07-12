@@ -16,9 +16,9 @@ RUN cd /tmp \
 # RUN cd /tmp \ && apt‑get install ‑y default‑jdk
 # RUN cd /tmp \ && apt‑get install ‑y wget
 RUN mkdir minecraft
-RUN wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastBuild/artifact/target/BuildTools.jar ‑p /minecraft/
+RUN wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastBuild/artifact/target/BuildTools.jar 
 RUN git config ‑‑global core.autocrlf input
-RUN java ‑jar minecraft/BuildTools.jar –rev 1.12
+RUN java ‑jar BuildTools.jar –rev 1.12
 RUN echo "eula=true" > eula.txt
 CMD java ‑XX:MaxPermSize=128M ‑Xms512m ‑Xmx1024m ‑jar spigot‑1.12.jar nogui
 EXPOSE 25565
