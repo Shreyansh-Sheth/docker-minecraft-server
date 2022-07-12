@@ -6,6 +6,10 @@
 #and fits well with the Docker approach
 #
 FROM ubuntu
+RUN cd /tmp \
+&& apt-get update \
+&& apt-get install -y curl apt-utils wget unzip\
+&& rm -rf /var/lib/apt/lists/*
 RUN sudo apt‑get update
 RUN apt‑get install ‑y git
 RUN apt‑get install ‑y default‑jdk
