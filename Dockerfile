@@ -8,7 +8,7 @@
 FROM ubuntu
 RUN cd /tmp \
 && apt-get update \
-&& apt-get install -y curl apt-utils default‑jdk git wget unzip\
+&& apt-get install -y curl apt-utils default-jdk-headless  git wget unzip\
 && rm -rf /var/lib/apt/lists/*
 
 # RUN cd /tmp \ && apt‑get update
