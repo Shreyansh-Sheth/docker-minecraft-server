@@ -16,7 +16,7 @@ RUN cd /tmp \
 # RUN cd /tmp \ && apt‑get install ‑y default‑jdk
 # RUN cd /tmp \ && apt‑get install ‑y wget
 RUN wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastBuild/artifact/target/BuildTools.jar 
-RUN java ‑jar BuildTools.jar
+RUN java ‑jar BuildTools.jar -Xmx8192M
 RUN ls
 RUN echo "eula=true" > eula.txt
 CMD java ‑XX:MaxPermSize=128M ‑Xms512m ‑Xmx1024m ‑jar spigot‑1.12.jar nogui
