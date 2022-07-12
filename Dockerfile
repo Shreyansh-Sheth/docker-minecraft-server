@@ -6,7 +6,7 @@
 #and fits well with the Docker approach
 #
 FROM ubuntu
-RUN apt‑get update
+RUN sudo apt‑get update
 RUN apt‑get install ‑y git
 RUN apt‑get install ‑y default‑jdk
 RUN apt‑get install ‑y wget
