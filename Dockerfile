@@ -15,7 +15,7 @@ RUN cd /tmp \
 # RUN cd /tmp \ && apt‑get install ‑y git
 # RUN cd /tmp \ && apt‑get install ‑y default‑jdk
 # RUN cd /tmp \ && apt‑get install ‑y wget
-RUN wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastBuild/artifact/target/BuildTools.jar -p /.
+RUN wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastBuild/artifact/target/BuildTools.jar 
 RUN ls
 RUN java -jar BuildTools.jar --rev latest
 RUN ls
