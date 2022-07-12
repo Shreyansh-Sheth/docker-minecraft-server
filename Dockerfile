@@ -5,7 +5,7 @@
 #This is advantageous in that it's better for plugin development
 #and fits well with the Docker approach
 #
-FROM ubuntu:16.04
+FROM ubuntu
 RUN apt‑get update
 RUN apt‑get install ‑y git
 RUN apt‑get install ‑y default‑jdk
