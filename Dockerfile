@@ -8,7 +8,7 @@
 FROM ubuntu
 RUN cd /tmp \
 && apt-get update \
-&& apt-get install -y  apt-utils default-jdk  git wget \
+&& apt-get install -y  apt-utils openjdk-17-jdk openjdk-17-jre  git wget \
 && rm -rf /var/lib/apt/lists/*
 
 # RUN cd /tmp \ && apt‑get update
