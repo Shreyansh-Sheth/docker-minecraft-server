@@ -8,7 +8,7 @@
 FROM ubuntu
 RUN cd /tmp \
 && apt-get update \
-&& apt-get install -y curl apt-utils default-jdk-headless  git wget unzip\
+&& apt-get install -y  apt-utils default-jdk-headless  git wget \
 && rm -rf /var/lib/apt/lists/*
 
 # RUN cd /tmp \ && apt‑get update
@@ -16,7 +16,7 @@ RUN cd /tmp \
 # RUN cd /tmp \ && apt‑get install ‑y default‑jdk
 # RUN cd /tmp \ && apt‑get install ‑y wget
 RUN mkdir minecraft
-RUN wget “https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar" ‑O minecraft/BuildTools.jar
+RUN wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar ‑O minecraft/BuildTools.jar
 RUN git config ‑‑global core.autocrlf input
 RUN java ‑jar minecraft/BuildTools.jar –rev 1.12
 RUN echo "eula=true" > eula.txt
