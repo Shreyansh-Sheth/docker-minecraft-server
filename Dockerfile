@@ -58,7 +58,7 @@ RUN easy-add --var version=1.3.0 --var app=restify --file {{.app}} --from https:
 
 RUN easy-add --var version=0.5.0 --var app=mc-monitor --file {{.app}} --from https://github.com/itzg/{{.app}}/releases/download/{{.version}}/{{.app}}_{{.version}}_linux_${ARCH}.tar.gz
 
-COPY *.sh /opt/
+COPY . /opt/
 
 COPY property-definitions.json /etc/bds-property-definitions.json
 
