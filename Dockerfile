@@ -1,24 +1,73 @@
 
-#Version 0.0.3
-#This version builds a spigot server
-#using the recommended build strategy for spigot
-#This is advantageous in that it's better for plugin development
-#and fits well with the Docker approach
-#
-FROM ubuntu
-RUN cd /tmp \
-&& apt-get update \
-&& apt-get install -y  apt-utils openjdk-17-jdk openjdk-17-jre  git wget \
-&& rm -rf /var/lib/apt/lists/*
+# #Version 0.0.3
+# #This version builds a spigot server
+# #using the recommended build strategy for spigot
+# #This is advantageous in that it's better for plugin development
+# #and fits well with the Docker approach
+# #
+# FROM ubuntu
+# RUN cd /tmp \
+# && apt-get update \
+# && apt-get install -y  apt-utils openjdk-17-jdk openjdk-17-jre  git wget \
+# && rm -rf /var/lib/apt/lists/*
 
-# RUN cd /tmp \ && apt‑get update
-# RUN cd /tmp \ && apt‑get install ‑y git
-# RUN cd /tmp \ && apt‑get install ‑y default‑jdk
-# RUN cd /tmp \ && apt‑get install ‑y wget
-RUN wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastBuild/artifact/target/BuildTools.jar 
-RUN ls
-RUN java -jar BuildTools.jar --rev latest
-RUN ls
-RUN echo "eula=true" > eula.txt
-CMD java ‑XX:MaxPermSize=128M ‑Xms512m ‑Xmx1024m ‑jar spigot‑1.12.jar nogui
-EXPOSE 25565
+# # RUN cd /tmp \ && apt‑get update
+# # RUN cd /tmp \ && apt‑get install ‑y git
+# # RUN cd /tmp \ && apt‑get install ‑y default‑jdk
+# # RUN cd /tmp \ && apt‑get install ‑y wget
+# RUN wget https://hub.spigotmc.org/jenkins/job/BuildTools/lastBuild/artifact/target/BuildTools.jar 
+# RUN ls
+# RUN java -jar BuildTools.jar --rev latest
+# RUN ls
+# RUN echo "eula=true" > eula.txt
+# CMD java ‑XX:MaxPermSize=128M ‑Xms512m ‑Xmx1024m ‑jar spigot‑1.12.jar nogui
+# EXPOSE 25565
+
+FROM debian
+
+# ARCH is only set to avoid repetition in Dockerfile since the binary download only supports amd64
+ARG ARCH=amd64
+
+ARG APT_UPDATE=20210112
+
+RUN apt-get update && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    curl \
+    unzip \
+    jq \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+EXPOSE 19132/udp
+
+VOLUME ["/data"]
+
+WORKDIR /data
+
+ENTRYPOINT ["/usr/local/bin/entrypoint-demoter", "--match", "/data", "--debug", "--stdin-on-term", "stop", "/opt/bedrock-entry.sh"]
+
+ARG EASY_ADD_VERSION=0.7.0
+ADD https://github.com/itzg/easy-add/releases/download/${EASY_ADD_VERSION}/easy-add_linux_${ARCH} /usr/local/bin/easy-add
+RUN chmod +x /usr/local/bin/easy-add
+
+RUN easy-add --var version=0.2.1 --var app=entrypoint-demoter --file {{.app}} --from https://github.com/itzg/{{.app}}/releases/download/{{.version}}/{{.app}}_{{.version}}_linux_${ARCH}.tar.gz
+
+RUN easy-add --var version=0.1.1 --var app=set-property --file {{.app}} --from https://github.com/itzg/{{.app}}/releases/download/{{.version}}/{{.app}}_{{.version}}_linux_${ARCH}.tar.gz
+
+RUN easy-add --var version=1.3.0 --var app=restify --file {{.app}} --from https://github.com/itzg/{{.app}}/releases/download/{{.version}}/{{.app}}_{{.version}}_linux_${ARCH}.tar.gz
+
+RUN easy-add --var version=0.5.0 --var app=mc-monitor --file {{.app}} --from https://github.com/itzg/{{.app}}/releases/download/{{.version}}/{{.app}}_{{.version}}_linux_${ARCH}.tar.gz
+
+COPY *.sh /opt/
+
+COPY property-definitions.json /etc/bds-property-definitions.json
+
+# Available versions listed at
+# https://minecraft.gamepedia.com/Bedrock_Edition_1.11.0
+# https://minecraft.gamepedia.com/Bedrock_Edition_1.12.0
+# https://minecraft.gamepedia.com/Bedrock_Edition_1.13.0
+# https://minecraft.gamepedia.com/Bedrock_Edition_1.14.0
+ENV VERSION=LATEST \
+    SERVER_PORT=19132
+
+HEALTHCHECK --start-period=1m CMD /usr/local/bin/mc-monitor status-bedrock --host 127.0.0.1 --port $SERVER_PORT
