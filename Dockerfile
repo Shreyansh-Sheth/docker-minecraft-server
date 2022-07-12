@@ -6,15 +6,16 @@
 #and fits well with the Docker approach
 #
 FROM ubuntu
-RUN cd /tmp \
-&& apt-get update \
-&& apt-get install -y curl apt-utils wget unzip\
-&& rm -rf /var/lib/apt/lists/*
-RUN sudo apt‑get update
-RUN apt‑get install ‑y git
-RUN apt‑get install ‑y default‑jdk
-RUN apt‑get install ‑y wget
-RUN mkdir minecraft
+# RUN cd /tmp \
+# && apt-get update \
+# && apt-get install -y curl apt-utils wget unzip\
+# && rm -rf /var/lib/apt/lists/*
+
+RUN cd /tmp \ && apt‑get update
+RUN cd /tmp \ && apt‑get install ‑y git
+RUN cd /tmp \ && apt‑get install ‑y default‑jdk
+RUN cd /tmp \ && apt‑get install ‑y wget
+RUN cd /tmp \ && mkdir minecraft
 RUN wget “https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar" ‑O minecraft/BuildTools.jar
 RUN git config ‑‑global core.autocrlf input
 RUN java ‑jar minecraft/BuildTools.jar –rev 1.12
